@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements.in
 #
-appnope==0.1.4
-    # via ipykernel
 asttokens==3.0.0
     # via stack-data
 cachetools==5.5.0
