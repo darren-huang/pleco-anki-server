@@ -4,8 +4,14 @@
 #
 #    pip-compile requirements.in
 #
+appnope==0.1.4
+    # via ipykernel
 asttokens==3.0.0
     # via stack-data
+attrs==24.3.0
+    # via
+    #   jsonschema
+    #   referencing
 cachetools==5.5.0
     # via google-auth
 certifi==2024.12.14
@@ -20,6 +26,8 @@ decorator==5.1.1
     # via ipython
 executing==2.1.0
     # via stack-data
+fastjsonschema==2.21.1
+    # via nbformat
 google-api-core==2.24.0
     # via google-api-python-client
 google-api-python-client==2.156.0
@@ -44,22 +52,33 @@ httplib2==0.22.0
     #   google-auth-httplib2
 idna==3.10
     # via requests
+import-ipynb==0.2
+    # via -r requirements.in
 ipykernel==6.29.5
     # via -r requirements.in
 ipython==8.31.0
-    # via ipykernel
+    # via
+    #   import-ipynb
+    #   ipykernel
 jedi==0.19.2
     # via ipython
+jsonschema==4.23.0
+    # via nbformat
+jsonschema-specifications==2024.10.1
+    # via jsonschema
 jupyter-client==8.6.3
     # via ipykernel
 jupyter-core==5.7.2
     # via
     #   ipykernel
     #   jupyter-client
+    #   nbformat
 matplotlib-inline==0.1.7
     # via
     #   ipykernel
     #   ipython
+nbformat==5.10.4
+    # via import-ipynb
 nest-asyncio==1.6.0
     # via ipykernel
 oauthlib==3.2.2
@@ -103,12 +122,20 @@ pyzmq==26.2.0
     # via
     #   ipykernel
     #   jupyter-client
+referencing==0.35.1
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.32.3
     # via
     #   google-api-core
     #   requests-oauthlib
 requests-oauthlib==2.0.0
     # via google-auth-oauthlib
+rpds-py==0.22.3
+    # via
+    #   jsonschema
+    #   referencing
 rsa==4.9
     # via google-auth
 six==1.17.0
@@ -127,6 +154,7 @@ traitlets==5.14.3
     #   jupyter-client
     #   jupyter-core
     #   matplotlib-inline
+    #   nbformat
 uritemplate==4.1.1
     # via google-api-python-client
 urllib3==2.3.0
