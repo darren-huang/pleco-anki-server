@@ -1,15 +1,26 @@
+from enum import Enum
+
+
+class ToneColor(Enum):
+    RED = "#E30000"
+    GREEN = "#02B31C"
+    PURPLE = "#8900BF"
+    BLUE = "#1510F0"
+    GREY = "#777777"  # Neutral tone
+
+
 def get_pinyin_color(pinyin):
-    tones = {
-        1: '#E30000',  # Red
-        2: '#02B31C',  # Green
-        3: '#8900BF',  # Purple
-        4: '#1510F0',  # Blue
-        5: '#777777'   # Gray (neutral tone)
+    tone_map = {
+        "āēīōūǖ": ToneColor.RED,
+        "áéíóúǘ": ToneColor.GREEN,
+        "ǎěǐǒǔǚ": ToneColor.PURPLE,
+        "àèìòùǜ": ToneColor.BLUE,
     }
 
-    tone = 1 if any(char in pinyin for char in 'āēīōūǖ') else \
-           2 if any(char in pinyin for char in 'áéíóúǘ') else \
-           3 if any(char in pinyin for char in 'ǎěǐǒǔǚ') else \
-           4 if any(char in pinyin for char in 'àèìòùǜ') else 5
+    tone_color = ToneColor.GREY  # Default to neutral tone
+    for chars, t in tone_map.items():
+        if any(char in pinyin for char in chars):
+            tone_color = t
+            break
 
-    return tones[tone]
+    return tone_color.value

@@ -4,14 +4,14 @@
 #
 #    pip-compile requirements.in
 #
-appnope==0.1.4
-    # via ipykernel
 asttokens==3.0.0
     # via stack-data
 attrs==24.3.0
     # via
     #   jsonschema
     #   referencing
+beautifulsoup4==4.12.3
+    # via -r requirements.in
 cachetools==5.5.0
     # via google-auth
 certifi==2024.12.14
@@ -52,14 +52,10 @@ httplib2==0.22.0
     #   google-auth-httplib2
 idna==3.10
     # via requests
-import-ipynb==0.2
-    # via -r requirements.in
 ipykernel==6.29.5
     # via -r requirements.in
 ipython==8.31.0
-    # via
-    #   import-ipynb
-    #   ipykernel
+    # via ipykernel
 jedi==0.19.2
     # via ipython
 jsonschema==4.23.0
@@ -78,7 +74,7 @@ matplotlib-inline==0.1.7
     #   ipykernel
     #   ipython
 nbformat==5.10.4
-    # via import-ipynb
+    # via -r requirements.in
 nest-asyncio==1.6.0
     # via ipykernel
 oauthlib==3.2.2
@@ -140,6 +136,8 @@ rsa==4.9
     # via google-auth
 six==1.17.0
     # via python-dateutil
+soupsieve==2.6
+    # via beautifulsoup4
 stack-data==0.6.3
     # via ipython
 tornado==6.4.2
