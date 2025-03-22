@@ -1,5 +1,5 @@
 from enum import Enum
-import re
+import regex as re
 
 
 class ToneColor(Enum):
@@ -42,10 +42,9 @@ def extract_fifth_tone_pinyin(file_path):
             for pinyin in parts:
                 for syllable in re.split(r"(?<=\d)\s*|\s+", pinyin):
                     if syllable.endswith("5"):
-                        # Remove the tone number and add the syllable to the set
-                        fifth_tone_pinyin.add(
-                            syllable[:-1]
-                        )  # Remove the "5" at the end
+                        syllable = re.sub(r"[^a-z]", "", syllable.lower())
+                        if syllable:
+                            fifth_tone_pinyin.add(syllable)
     return fifth_tone_pinyin
 
 
@@ -60,7 +59,9 @@ def extract_toneless_pinyin(file_path):
             parts = re.findall(r"\[(.*?)\]", line)
             for pinyin in parts:
                 for syllable in re.split(r"(?<=\d)\s*|\s+", pinyin):
-                    toneless_pinyin.add(syllable[:-1])  # Remove the "5" at the end
+                    syllable = re.sub(r"[^a-z]", "", syllable.lower())
+                    if syllable:
+                        toneless_pinyin.add(syllable)
     return toneless_pinyin
 
 

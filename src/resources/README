@@ -10,3 +10,12 @@ moedict.csv
 
 scraped from my own anki cards
 part_of_speech_keywords.json
+
+copied from https://github.com/g0v/moedict-webkit/blob/master/ENG-README.md lord knows where they got it from (the a/*.json here i think is the same as moedict)
+c/*.json
+
+flashcard_entries.json
+- i think this is some saved version of my working set of flashcards, has the definition from iphone dump combined with actual anki cards from ankiconnect
+
+all_formatted_backs.json
+- i think scraped from ankiconnect
