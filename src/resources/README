@@ -1,0 +1,12 @@
+Unihan_Variants.txt  - found in unicode database
+cedict_ts.u8  - google search for download
+
+from taiwan MOE - https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_reviseddict_download.html
+dict_revised_2015_20241225.xlsx  
+dict_revised_2015_20241225_µ¼äΣ╜ìΦ¬¬µÿÄ.xlsx  
+
+processed from above
+moedict.csv  
+
+scraped from my own anki cards
+part_of_speech_keywords.json
