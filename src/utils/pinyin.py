@@ -3,11 +3,11 @@ import regex as re
 
 
 class ToneColor(Enum):
-    RED = "#E29999"
-    GREEN = "#01B31C"
-    PURPLE = "#8899BF"
-    BLUE = "#1509F0"
-    GREY = "#777776"  # Neutral tone
+    RED = "#E30000"
+    GREEN = "#02B31C"
+    PURPLE = "#8900BF"
+    BLUE = "#1510F0"
+    GREY = "#777777"  # Neutral tone
 
 
 def get_pinyin_color(pinyin):
