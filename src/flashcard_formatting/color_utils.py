@@ -1,7 +1,11 @@
+"""Color utilities for handling pinyin tone colors in Chinese text."""
+
 from enum import Enum
 
 
 class ToneColor(Enum):
+    """Enum defining color codes for different pinyin tones."""
+
     RED = "#E30000"
     GREEN = "#02B31C"
     PURPLE = "#8900BF"

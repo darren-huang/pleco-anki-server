@@ -1,8 +1,11 @@
-import regex as re
-import regex
-import functools
+"""Utilities for handling Chinese character variants with caching for performance."""
+
 import csv
+import functools
+import json
 import os
+
+import regex as re
 
 
 # Load CC-CEDICT (Only Traditional Variants) ###
@@ -34,6 +37,7 @@ def load_cc_cedict(filename="cedict_ts.u8"):
 # Load CC-CEDICT (Only Traditional Variants) ###
 @functools.lru_cache(maxsize=None)  # Infinite cache size
 def load_moedict(filename="moedict.csv"):
+    """Parses moedict.csv to extract traditional-only variant mappings."""
     variants = {}
 
     # Open the moedict.csv file
@@ -66,7 +70,6 @@ def get_c_variants(folder_path="c"):
     Args:
         folder_path (str): Path to the folder containing files.
     """
-    global test_txt
     variants = {}
 
     for file_name in os.listdir(folder_path):
@@ -83,10 +86,10 @@ def get_c_variants(folder_path="c"):
                 or file_name.startswith("xref")
             ):
                 continue
-            non_chinese_or_bracket = regex.compile(r"[^「」\p{Han}]")
-            word = regex.sub(non_chinese_or_bracket, "", data["t"])
+            non_chinese_or_bracket = re.compile(r"[^「」\p{Han}]")
+            word = re.sub(non_chinese_or_bracket, "", data["t"])
             definitions = [
-                regex.sub(non_chinese_or_bracket, "", d["f"])
+                re.sub(non_chinese_or_bracket, "", d["f"])
                 for h in data.get("h", [])  # Start from the 'h' key
                 for d in h.get("d", [])  # Look inside the 'd' list
             ]
@@ -159,6 +162,7 @@ def load_manual_variants(filename="manual_variants.csv"):
 
 
 def get_variants(word):
+    """Get all variants for a given word from various sources."""
     return (
         load_cc_cedict()
         .get(word, set())

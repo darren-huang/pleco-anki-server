@@ -1,13 +1,36 @@
-from enum import Enum
-import regex as re
+"""Utilities for handling Chinese pinyin, including tone processing and conversion functions."""
+
+import csv
 import functools
 from collections import defaultdict
-import csv
-from importlib.resources import files
+from enum import Enum
 
+import regex as re
+
+from src.utils.resource_utils import get_resource_path
 
 SKIPPABLE_LEFTOVER_PINYIN = [".", ","]
 KEEPABLE_PINYIN_PUNC = ["'", "-", "·"]
+
+# Cache for fifth tone pinyin list
+_FIFTH_TONE_PINYIN_CACHE = None
+
+
+def get_fifth_tone_pinyins():
+    """
+    Get the list of fifth tone pinyin syllables from CEDICT.
+    Uses caching to avoid repeated file reads.
+
+    Returns:
+        list: List of fifth tone pinyin syllables
+    """
+    global _FIFTH_TONE_PINYIN_CACHE  # pylint: disable=global-statement
+    if _FIFTH_TONE_PINYIN_CACHE is None:
+        cedict_path = get_resource_path(CEDICT_FILENAME)
+        _FIFTH_TONE_PINYIN_CACHE = sorted(extract_fifth_tone_pinyin(cedict_path))
+    return _FIFTH_TONE_PINYIN_CACHE
+
+
 CONVERT_PUNC_DICT = {
     "。": ".",
     "！": "!",
@@ -46,8 +69,8 @@ def get_pinyin_color(pinyin):
     return tone_color.value
 
 
-# Make use of cc-cedict to extract pinyin info
 def extract_fifth_tone_pinyin(file_path):
+    """Extract fifth tone pinyin syllables from the CEDICT file."""
     fifth_tone_pinyin = set()  # Use a set to avoid duplicates
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -66,6 +89,7 @@ def extract_fifth_tone_pinyin(file_path):
 
 
 def extract_toneless_pinyin(file_path):
+    """Extract toneless pinyin syllables from the CEDICT file."""
     toneless_pinyin = set()  # Use a set to avoid duplicates
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -83,16 +107,21 @@ def extract_toneless_pinyin(file_path):
 
 
 class TrieNode:
+    """Node class for Trie data structure."""
+
     def __init__(self):
         self.children = {}
         self.is_end_of_word = False
 
 
 class Trie:
+    """Trie data structure for efficient prefix matching."""
+
     def __init__(self):
         self.root = TrieNode()
 
     def insert(self, word):
+        """Insert a word into the Trie."""
         node = self.root
         for char in word:
             if char not in node.children:
@@ -101,6 +130,7 @@ class Trie:
         node.is_end_of_word = True
 
     def get_longest_length(self, word, i):
+        """Get the length of the longest prefix in the Trie starting from index i."""
         node = self.root
         longest_length = 0
         current_length = 0
@@ -118,14 +148,15 @@ class Trie:
 
 
 def create_trie_from_pinyin(pinyin_set):
+    """Create a Trie from a set of pinyin strings."""
     trie = Trie()
     for pinyin in pinyin_set:
         trie.insert(pinyin.lower().strip())
     return trie
 
 
-# converts numbered pinyin to pinyin with tone marks
 def convert_pinyin(pinyin):
+    """Convert numbered pinyin to pinyin with tone marks."""
     tone_marks = {
         "a": "āáǎàa",
         "e": "ēéěèe",

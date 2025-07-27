@@ -1,9 +1,24 @@
+"""Module for parsing and processing Pleco flashcard XML files."""
+
 import xml.etree.ElementTree as ET
 from src.utils.pinyin import convert_pinyin
 
 
 def process_flashcard_xml(xml_text):
-    """returns a list of dictionaries with simplified, traditional, pinyin, definition, and dictid"""
+    """Process Pleco flashcard XML into dictionary entries.
+
+    Args:
+        xml_text: XML string containing Pleco flashcard data
+
+    Returns:
+        tuple: (list of processed entries, list of problematic entries)
+        entries is a list of dictionaries with keys:
+            - simplified: Simplified Chinese characters
+            - traditional: Traditional Chinese characters
+            - pinyin: Pinyin representation
+            - definition: English definition
+            - dictid: Dictionary ID from the card
+    """
     # example xml text: <?xml version="1.0" encoding="UTF-8"?><plecoflash formatversion="2" creator="Pleco User 19097293" generator="Pleco 2.0 Flashcard Exporter" platform="iPhone OS" created="1735693200"><categories></categories><cards><card language="chinese" created="1735513394" modified="1735513394"><entry><headword charset="sc">游戏</headword><headword charset="tc">遊戲</headword><pron type="hypy" tones="numbers">you2xi4</pron><defn>noun recreation; game 做遊戲 Zuò yóuxì play games verb play 孩子們在公園裡遊戲。 Háizi men zài gōngyuán lǐ yóuxì. The children are playing in the park.</defn></entry><dictref dictid="PACE" entryid="35050240"/></card><card language="chinese" created="1735514285" modified="1735514285"><entry><headword charset="sc">革新</headword><headword charset="tc">革新</headword><pron type="hypy" tones="numbers">ge2xin1</pron><defn>noun innovation; renovation 技術革新 jìshù géxīn technological innovation verb innovate; improve 傳統的手工藝技術不斷革新。 Chuántǒng de shǒu gōngyì jìshù bùduàn géxīn. Traditional handicraft techniques are being steadily improved.</defn></entry><dictref dictid="PACE" entryid="21578752"/></card>
 
     # Parse the XML content

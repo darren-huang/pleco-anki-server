@@ -1,8 +1,13 @@
+"""Module for formatting dictionary entries into HTML-formatted Anki flashcards."""
+
 import re
 
-from .color_utils import get_pinyin_color
-from .html_utils import fix_separated_pos_tags, reorder_bold_and_color_spans
-from .label_segments import label_segments
+from src.flashcard_formatting.color_utils import get_pinyin_color
+from src.flashcard_formatting.html_utils import (
+    fix_separated_pos_tags,
+    reorder_bold_and_color_spans,
+)
+from src.flashcard_formatting.label_segments import label_segments
 
 
 def fmt_entry(entry):

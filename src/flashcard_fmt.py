@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Main module for processing and formatting Pleco flashcards into Anki format."""
 
 import os
 import re
@@ -6,7 +7,7 @@ from src.flashcard_formatting.format_entry import fmt_entry, grade_fmt_entry
 from src.utils.file_utils import save_flashcard_entries
 from src.utils.google_drive_utils import get_latest_flashcard_xml
 from src.flashcard_formatting.flashcard_xml import process_flashcard_xml
-from src.utils.anki_connect import get_card_info
+from src.utils.anki_connect import get_anki_deck_cards
 from src.utils.file_utils import convert_unicode_segments
 
 
@@ -30,7 +31,7 @@ def main():
         )
 
         # Get Anki card information
-        anki_cards = get_card_info("Pleco Import")
+        anki_cards = get_anki_deck_cards("Pleco Import")
         anki_cards_dict = {
             re.sub(r"[^\u4e00-\u9fff]", "", card["fields"]["Front"]["value"]): card
             for card in anki_cards

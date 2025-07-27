@@ -1,17 +1,30 @@
-# segment definition
+"""Module for segmenting and labeling Chinese text with pinyin, parts of speech, and example sentences."""
 
 import regex as re
 import json
 from src.utils.utils import overlap_length
 from src.flashcard_formatting.example_sentences import add_bold_segments
+from src.utils.pinyin import get_fifth_tone_pinyins
+from src.utils.resource_utils import get_resource_path
 
 
 # Load the part of speech keywords from the JSON file
-with open("part_of_speech_keywords.json", "r") as file:
+with open(
+    get_resource_path("part_of_speech_keywords.json"), "r", encoding="utf-8"
+) as file:
     part_of_speech_keywords = json.load(file)
 
 
 def label_segments(text, traditional_word):
+    """Segment Chinese text into labeled parts including Chinese characters, pinyin, and English translations.
+
+    Args:
+        text: The text to segment, containing Chinese characters, pinyin, and English
+        traditional_word: The traditional Chinese word being processed
+
+    Returns:
+        List of dictionaries containing labeled segments with keys 'segment' and 'label'
+    """
     segments = []
     part_of_speech_pattern = re.compile(
         r"(\n?\b("
@@ -194,7 +207,7 @@ def shift_leading_whitespace(segments):
 
 def process_whitespace_english(segments):
     new_segments = []
-    last_seg = None
+    last_seg = {}
     for seg in segments:
         if (
             last_seg
@@ -387,7 +400,7 @@ def process_fifth_tone_pinyin(segments):
                 current_segment["label"] in ["chinese", "pinyin"]
                 and next_segment["label"] == "english"
             ):
-                for pinyin in fifth_tone_pinyins:
+                for pinyin in get_fifth_tone_pinyins():
                     regex_patt = "^" + pinyin + r"($|[^a-zA-Z’])"
                     mtch = re.match(regex_patt, next_segment["segment"].lower())
                     if mtch:

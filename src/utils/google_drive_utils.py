@@ -1,19 +1,23 @@
+"""Google Drive integration utilities for file synchronization and authentication."""
+
+import datetime
+import json
 import os
+import time
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
 from src.constants import (
-    SCOPES,
-    TOKEN_FILE,
     CREDENTIALS_FILE,
     FLASHCARD_FILE_NAME,
     MEMORY_FILE,
+    SCOPES,
+    TOKEN_FILE,
 )
-import datetime
-import json
-import time
 
 
 def authenticate_google_drive():
@@ -38,7 +42,7 @@ def authenticate_google_drive():
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save credentials for the next run
-        with open(TOKEN_FILE, "w") as token:
+        with open(TOKEN_FILE, "w", encoding="utf-8") as token:
             token.write(creds.to_json())
 
     # Build the Drive API service
@@ -108,7 +112,9 @@ def get_latest_flashcard_xml():
 
     # Download the content of the target file
     target_file = files[0]
-    request = SERVICE.files().get_media(fileId=target_file["id"])
+    request = SERVICE.files().get_media(  # pylint: disable=E1101
+        fileId=target_file["id"]
+    )
     file_content = request.execute()
     file_text = file_content.decode("utf-8")
     modified_time = datetime.datetime.fromisoformat(
@@ -123,6 +129,7 @@ def get_latest_flashcard_xml():
 
 
 def archive_flashcard_xmls(archive_latest=False):
+    """Archive all flashcard XML files except the latest one."""
     files = get_items_by_name(
         SERVICE, FLASHCARD_FILE_NAME, is_folder=False, is_root=True
     )
@@ -186,12 +193,12 @@ def process_file(file):
 def load_processed_files():
     """Load the list of processed file IDs from a local memory file."""
     if os.path.exists(MEMORY_FILE):
-        with open(MEMORY_FILE, "r") as file:
+        with open(MEMORY_FILE, "r", encoding="utf-8") as file:
             return set(json.load(file))
     return set()
 
 
 def save_processed_files(processed_files):
     """Save the list of processed file IDs to a local memory file."""
-    with open(MEMORY_FILE, "w") as file:
+    with open(MEMORY_FILE, "w", encoding="utf-8") as file:
         json.dump(list(processed_files), file)

@@ -1,9 +1,11 @@
-import requests
+"""Interface to AnkiConnect API for managing Anki flashcard operations."""
+
 import re
+import requests
 from src.constants import ANKI_CONNECT_URL
 
 
-def get_card_info(deck_name):
+def get_anki_deck_cards(deck_name):
     """Retrieve detailed card information from a specified deck."""
     find_payload = {
         "action": "findCards",
@@ -13,7 +15,7 @@ def get_card_info(deck_name):
         },
     }
 
-    response = requests.post(ANKI_CONNECT_URL, json=find_payload)
+    response = requests.post(ANKI_CONNECT_URL, json=find_payload, timeout=60)
 
     if response.status_code == 200:
         find_result = response.json()
@@ -25,7 +27,9 @@ def get_card_info(deck_name):
                 "params": {"cards": card_ids},  # Pass the list of card IDs
             }
 
-            info_response = requests.post(ANKI_CONNECT_URL, json=info_payload)
+            info_response = requests.post(
+                ANKI_CONNECT_URL, json=info_payload, timeout=60
+            )
 
             if info_response.status_code == 200:
                 info_result = info_response.json()
@@ -46,9 +50,10 @@ def get_card_info(deck_name):
 
 
 def sync_anki():
+    """Sync Anki with the cloud to ensure the latest data is available."""
     sync_payload = {"action": "sync", "version": 6}
 
-    sync_response = requests.post(ANKI_CONNECT_URL, json=sync_payload)
+    sync_response = requests.post(ANKI_CONNECT_URL, json=sync_payload, timeout=60)
 
     if sync_response.status_code == 200:
         sync_result = sync_response.json()
@@ -61,13 +66,14 @@ def sync_anki():
 
 
 def get_latest_anki_flaschard_words():
+    """Retrieve the latest flashcard words from the 'Pleco Import' deck in Anki."""
     flashcard_set = set()
 
     # Step 0: Sync Anki with the cloud
     sync_anki()
 
     # Step 1: Find all card information in the "Pleco Import" deck
-    card_info = get_card_info("Pleco Import")
+    card_info = get_anki_deck_cards("Pleco Import")
     print(f"Total cards found in 'Pleco Import': {len(card_info)}")
 
     # Step 2: Extract the "Front" field for each card and add to the set

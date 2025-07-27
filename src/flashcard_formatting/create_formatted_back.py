@@ -1,7 +1,17 @@
+"""Module for creating formatted back sides of flashcards with proper HTML layout."""
+
 import json
 
 
 def create_formatted_back(entry):
+    """Create HTML formatted back side of a flashcard from entry data.
+
+    Args:
+        entry: Dictionary containing traditional, simplified, pinyin and definition
+
+    Returns:
+        str: Formatted HTML string for the back of the flashcard
+    """
     traditional = entry.get("traditional", "")
     simplified = entry.get("simplified", "")
     pinyin = entry.get("pinyin", "")
@@ -18,6 +28,11 @@ def create_formatted_back(entry):
 
 
 def process_flashcard_entries(file_path):
+    """Process all flashcard entries in a JSON file and add formatted backs.
+
+    Args:
+        file_path: Path to the JSON file containing flashcard entries
+    """
     with open(file_path, "r", encoding="utf-8") as file:
         entries = json.load(file)
 

@@ -1,4 +1,6 @@
-from src.utils import find_file_with_wildcard
+"""Constants used throughout the Pleco-Anki server application for file paths, URLs, and configurations."""
+
+from src.utils.utils import find_file_with_wildcard
 
 # Define scopes for accessing Google Drive
 SCOPES = ["https://www.googleapis.com/auth/drive"]

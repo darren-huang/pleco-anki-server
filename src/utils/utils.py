@@ -1,3 +1,4 @@
+"""Utility functions for the Pleco Anki Server project."""
 import unicodedata
 import glob
 import regex as re
@@ -21,10 +22,12 @@ def find_file_with_wildcard(pattern):
 
 
 def fullwidth_to_ascii(text):
+    """Convert fullwidth characters to their ASCII equivalents."""
     return "".join(unicodedata.normalize("NFKC", char) for char in text)
 
 
 def overlap_length(chinese: str, english: str) -> int:
+    """Calculate the length of overlapping trailing characters between Chinese and English text."""
     # Match all trailing non-Han characters from the Chinese string
     match = re.search(r".*[\p{Han}]", chinese)
     if match:

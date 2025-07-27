@@ -1,5 +1,11 @@
+"""Module for processing and formatting Chinese example sentences with correct pinyin and highlighting."""
+
+# Third-party imports
+import regex as re
+from pypinyin import pinyin, Style
+
+# Local imports
 from src.utils.pinyin import (
-    get_variants,
     strip_tone_marks,
     load_manual_pinyins,
     parse_cedict_toneless_pinyins,
@@ -7,8 +13,7 @@ from src.utils.pinyin import (
     KEEPABLE_PINYIN_PUNC,
     CONVERT_PUNC_DICT,
 )
-import regex as re
-from pypinyin import pinyin, Style
+from src.utils.variants_cached import get_variants
 
 
 def update_example_sentence_with_variants(traditional_word, segment):

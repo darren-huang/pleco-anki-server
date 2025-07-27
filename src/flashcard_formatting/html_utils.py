@@ -1,3 +1,5 @@
+"""Utilities for manipulating HTML in flashcard content, focusing on span and style management."""
+
 import re
 from bs4 import BeautifulSoup
 

@@ -1,7 +1,10 @@
+"""Utilities for HTML manipulation and processing."""
+
 from bs4 import BeautifulSoup
 
 
 def reorder_nested_spans(html_text):
+    """Reorder nested span elements to ensure correct styling application."""
     # Parse the HTML text
     soup = BeautifulSoup(f"<root>{html_text}</root>", "html.parser")
 
