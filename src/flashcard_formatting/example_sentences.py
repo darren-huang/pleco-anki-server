@@ -425,3 +425,90 @@ def split_chinese_pinyin_helper(
         if print_debug:
             print(f"Error: {e}")
         raise e
+
+
+def add_bold_segments(example_sentence, traditional_word):
+    split_chinese_pinyin(example_sentence, trad_word=traditional_word)
+    update_example_sentence_with_variants(traditional_word, example_sentence)
+    update_example_sentence_with_separated_words(traditional_word, example_sentence)
+    to_bold = None
+    if traditional_word in example_sentence["chinese"]:
+        to_bold = traditional_word
+    elif "variant" in example_sentence:
+        to_bold = example_sentence["variant"]
+    elif "separated_word" in example_sentence:
+        to_bold = example_sentence["separated_word"]
+    else:
+        raise ValueError(
+            f"No valid word found to bold for {traditional_word}, example sentence: {example_sentence}"
+        )
+
+    chinese_final_list = []  # [{'segment': '升級到', 'bold': false}, ...]}
+    pinyin_final_list = []  # [{'segment': 'shengjidao', 'bold': false}, ...]}
+
+    # Collect characters and pinyins to process
+    chinese_chars = example_sentence["chinese_list"]
+    pinyin_chars = example_sentence["pinyin_list"]
+    found_bold = False
+
+    i = 0
+    while i < len(chinese_chars):
+        # Check if the current position starts a matching segment for to_bold
+        if (
+            i + len(to_bold) <= len(chinese_chars)
+            and "".join(chinese_chars[i : i + len(to_bold)]) == to_bold
+        ):
+            # Add the bold segment as a whole
+            chinese_final_list.append({"segment": to_bold, "bold": True})
+
+            # Collect corresponding pinyin for the bold segment
+            bold_pinyin = "".join(pinyin_chars[i : i + len(to_bold)])
+            bold_pinyin_whtspc = bold_pinyin[len(bold_pinyin.rstrip()) :]
+            bold_pinyin = bold_pinyin.rstrip()
+            pinyin_final_list.append({"segment": bold_pinyin, "bold": True})
+            if bold_pinyin_whtspc:
+                pinyin_chars[i + len(to_bold)] = (
+                    bold_pinyin_whtspc + pinyin_chars[i + len(to_bold)]
+                )
+
+            # Skip ahead past the bold segment
+            found_bold = True
+            i += len(to_bold)
+        else:
+            # Add non-bold character
+            chinese_final_list.append({"segment": chinese_chars[i], "bold": False})
+            pinyin_final_list.append({"segment": pinyin_chars[i], "bold": False})
+            i += 1
+
+    if not found_bold:
+        raise ValueError(
+            f"Could not find the word '{to_bold}' in the example sentence. {example_sentence}"
+        )
+
+    # Now combine any adjacent segments with the same bold status
+    # (This is technically redundant with the logic above but included for clarity)
+    combined_chinese = []
+    combined_pinyin = []
+
+    if chinese_final_list:
+        current_chinese = chinese_final_list[0]
+        current_pinyin = pinyin_final_list[0]
+
+        for i in range(1, len(chinese_final_list)):
+            if chinese_final_list[i]["bold"] == current_chinese["bold"]:
+                # Combine with previous segment of same type
+                current_chinese["segment"] += chinese_final_list[i]["segment"]
+                current_pinyin["segment"] += pinyin_final_list[i]["segment"]
+            else:
+                # Add the completed segment and start a new one
+                combined_chinese.append(current_chinese)
+                combined_pinyin.append(current_pinyin)
+                current_chinese = chinese_final_list[i]
+                current_pinyin = pinyin_final_list[i]
+
+        # Add the last segment
+        combined_chinese.append(current_chinese)
+        combined_pinyin.append(current_pinyin)
+
+    example_sentence["chinese_list_w_bold_labels"] = combined_chinese
+    example_sentence["pinyin_list_w_bold_labels"] = combined_pinyin

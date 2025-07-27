@@ -3,6 +3,7 @@ import regex as re
 import functools
 from collections import defaultdict
 import csv
+from importlib.resources import files
 
 
 SKIPPABLE_LEFTOVER_PINYIN = [".", ","]
@@ -17,6 +18,7 @@ CONVERT_PUNC_DICT = {
     "《": "«",
     "》": "»",
 }
+CEDICT_FILENAME = "cedict_ts.u8"
 
 
 class ToneColor(Enum):
@@ -45,8 +47,6 @@ def get_pinyin_color(pinyin):
 
 
 # Make use of cc-cedict to extract pinyin info
-
-
 def extract_fifth_tone_pinyin(file_path):
     fifth_tone_pinyin = set()  # Use a set to avoid duplicates
     with open(file_path, "r", encoding="utf-8") as f:
