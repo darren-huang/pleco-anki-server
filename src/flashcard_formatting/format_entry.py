@@ -1,7 +1,8 @@
-from .color_utils import get_pinyin_color
-from .html_utils import reorder_bold_and_color_spans, fix_separated_pos_tags
-from .label_segments import label_segments
 import re
+
+from .color_utils import get_pinyin_color
+from .html_utils import fix_separated_pos_tags, reorder_bold_and_color_spans
+from .label_segments import label_segments
 
 
 def fmt_entry(entry):
@@ -70,7 +71,7 @@ def fmt_entry(entry):
             formatted_back += '<blockquote style="border-left: 2px solid #0078c3; margin-left: 3px; padding-left: 1em; margin-top: 0px; margin-bottom: 0px;"><p>'
             # chinese
             for ex_seg in segment["chinese_list_w_bold_labels"]:
-                formatted_back += f'<span style="color:#0078C3;">'
+                formatted_back += '<span style="color:#0078C3;">'
                 if ex_seg["bold"]:
                     formatted_back += f'<b>{ex_seg["segment"]}</b>'
                 else:

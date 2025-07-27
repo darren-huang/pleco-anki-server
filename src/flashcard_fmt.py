@@ -2,12 +2,12 @@
 
 import os
 import re
-from flashcard_formatting.format_entry import fmt_entry, grade_fmt_entry
-from utils.file_utils import save_flashcard_entries
-from utils.google_drive_utils import get_latest_flashcard_xml
-from flashcard_formatting.flashcard_xml import process_flashcard_xml
-from utils.anki_connect import get_card_info
-from utils.html import convert_unicode_segments
+from src.flashcard_formatting.format_entry import fmt_entry, grade_fmt_entry
+from src.utils.file_utils import save_flashcard_entries
+from src.utils.google_drive_utils import get_latest_flashcard_xml
+from src.flashcard_formatting.flashcard_xml import process_flashcard_xml
+from src.utils.anki_connect import get_card_info
+from src.utils.file_utils import convert_unicode_segments
 
 
 def main():
